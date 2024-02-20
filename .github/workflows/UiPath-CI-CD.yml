@@ -1,86 +1,27 @@
 name: UiPath CI/CD Pipeline
 
+name: UiPath Automation Workflow
+
 on:
   push:
     branches:
-      - xdev
-      - xqa
-      - zprod
+      - dev
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install UiPath
+      - name: Install UiPath Studio
+        uses: toniblyx/setup-uipath@v1
+
+      - name: Build and Test Automation Project
         run: |
-          choco install uipath -y
+          # Add commands to build and test your UiPath automation project here
 
-      - name: Build and Package
+      - name: Deploy to Orchestrator
         run: |
-          # Add commands to build and package your UiPath project
-          # For example:
-          # uipath-cli pack --project-path path/to/your/project
-
-      - name: Publish Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: uipath-package
-          path: path/to/your/packaged/artifact
-
-  deploy-dev:
-    needs: build
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/dev'
-
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: uipath-package
-          path: path/to/your/local/directory
-
-      - name: Deploy to Dev Orchestrator
-        run: |
-          # Add commands to deploy your UiPath artifact to Dev Orchestrator
-          # For example:
-          # uipath-cli publish -f path/to/your/packaged/artifact -t Dev_Orchestrator_URL -k API_KEY
-
-  deploy-qa:
-    needs: build
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/qa'
-
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: uipath-package
-          path: path/to/your/local/directory
-
-      - name: Deploy to QA Orchestrator
-        run: |
-          # Add commands to deploy your UiPath artifact to QA Orchestrator
-          # For example:
-          # uipath-cli publish -f path/to/your/packaged/artifact -t QA_Orchestrator_URL -k API_KEY
-
-  deploy-prod:
-    needs: build
-    runs-on: windows-latest
-    if: github.ref == 'refs/heads/prod'
-
-    steps:
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: uipath-package
-          path: path/to/your/local/directory
-
-      - name: Deploy to Prod Orchestrator
-        run: |
-          # Add commands to deploy your UiPath artifact to Prod Orchestrator
-          # For example:
-          # uipath-cli publish -f path/to/your/packaged/artifact -t Prod_Orchestrator_URL -k API_KEY
+          # Add commands to deploy your automation project to UiPath Orchestrator here
